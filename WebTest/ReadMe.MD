@@ -1,1 +1,3 @@
-﻿WIP - not ready to use yet.  When first release rfeady this readme will be populated with deployment and environment details.
+﻿First Release.  Two BVT tests.
+
+To execute BOTH tests, follow instructions of project to have local website executing IN API STUBBED mode.

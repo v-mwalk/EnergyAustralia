@@ -1,0 +1,10 @@
+<ol>
+  <li *ngFor="let festivalBand of festivalBands$ | async">
+    {{ festivalBand.bandName}}
+    <ul>
+      <li>
+        {{ festivalBand.festivalName}}
+      </li>  
+    </ul>
+  </li>
+</ol>
