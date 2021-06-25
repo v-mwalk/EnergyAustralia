@@ -93,19 +93,23 @@ namespace WebTest.Features
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 5
+#line hidden
+        }
+        
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Page is populated with something")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Page is populated with at least one band")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FestivalsBVT")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("BVT")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Connected")]
-        public virtual void PageIsPopulatedWithSomething()
+        public virtual void PageIsPopulatedWithAtLeastOneBand()
         {
             string[] tagsOfScenario = new string[] {
-                    "BVT",
-                    "Connected"};
+                    "BVT"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Page is populated with something", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 7
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Page is populated with at least one band", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -125,23 +129,35 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 5
+this.FeatureBackground();
+#line hidden
+#line 9
+testRunner.Given("i browse to the Festivals page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 10
+testRunner.When("the \"Festivals\" page is viewed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 11
+testRunner.Then("the page is populated with at least one band", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Page is populated with injected basic data")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Single Band with one festival shows correctly")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FestivalsBVT")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("BVT")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Stubbed")]
-        public virtual void PageIsPopulatedWithInjectedBasicData()
+        public virtual void SingleBandWithOneFestivalShowsCorrectly()
         {
             string[] tagsOfScenario = new string[] {
                     "BVT",
                     "Stubbed"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Page is populated with injected basic data", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 12
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Single Band with one festival shows correctly", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 15
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -161,6 +177,28 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 5
+this.FeatureBackground();
+#line hidden
+#line 16
+testRunner.Given("Festivals API data is \"[{\"name\":\"Reading festival\",\"bands\":[{\"name\":\"Critter Girl" +
+                        "s\",\"recordLabel\":\"ACR\"}]}]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 17
+testRunner.And("i browse to the Festivals page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 18
+testRunner.When("the \"Festivals\" page is viewed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 19
+testRunner.Then("the page is populated with exactly 1 band/s", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 20
+testRunner.And("on the page Band 1 is named \"Critter Girls\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
+testRunner.And("on the page Band \"Critter Girls\" is playing at \"Reading festival\" festival", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }

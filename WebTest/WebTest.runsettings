@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <TestRunParameters>
+    <Parameter name="Browser" value="Chrome" />
+    <Parameter name="HomeURL" value="http://localhost:4200" />
+    <Parameter name="FestivalsPageTitle" value="EACodingTest" />
+    <Parameter name="StubURL" value="http://localhost:9000/codingtest/api/v1/DataInjection" />
+    <Parameter name="PageTimeoutSeconds" value="10" />
+  </TestRunParameters>
+</RunSettings>

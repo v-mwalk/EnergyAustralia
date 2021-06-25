@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace FestivalsStub
 {
@@ -14,9 +18,20 @@ namespace FestivalsStub
         /// badly formed data to be accepted and stored and then returned when call to Festivals GET made.  Quite simple but time here is of importance so not done.
         /// </remarks>
         /// <param name="value">Well-formed MusicFestival test data</param>
-        public void Put([FromBody] MusicFestival[] value)
+        public HttpResponseMessage Put([FromBody] MusicFestival[] value)
         {
-            TestData.Festivals = value;
+            Console.WriteLine("PUT Called");
+            try
+            {
+                TestData.Festivals = null;
+                TestData.Festivals = value;
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+            if (TestData.Festivals==null) return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"Error loading JSON");
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
     }
 }

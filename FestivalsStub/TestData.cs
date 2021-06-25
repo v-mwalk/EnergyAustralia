@@ -22,7 +22,7 @@ namespace FestivalsStub
             }
             get
             {
-                return festivals ?? new MusicFestival[] { new MusicFestival() };
+                return festivals;
             }
         }
     }
@@ -33,10 +33,6 @@ namespace FestivalsStub
     //
     public class MusicFestival
     {
-        public MusicFestival()
-        {
-            name = "No Test data Set";
-        }
         public string name { get; set; }
         public Band[] bands { get; set; }
     }
