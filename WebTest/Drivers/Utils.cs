@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -162,6 +163,20 @@ namespace WebTest.Drivers
         static public void WriteLine(string text, params object[] args)
         {
             TestContext.WriteLine(text, args);
+        }
+
+
+        static public void TakeScreenshot(string title)
+        {
+            Screenshot ss = ((ITakesScreenshot)WebDriver).GetScreenshot();
+            string Runname = title + DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss");
+            string screenshotfilename = ".\\screenshots\\" + Runname + ".jpg";
+            ss.SaveAsFile(screenshotfilename, ScreenshotImageFormat.Jpeg);
+        }
+
+        static public void MyElementClickedHandler(object sender, WebElementEventArgs e)
+        {
+            Console.WriteLine("Clicked");
         }
     }
 }

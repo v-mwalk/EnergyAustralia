@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.Events;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.ObjectModel;
@@ -40,7 +41,7 @@ namespace WebTest.Steps
                 // Instantiate a new browser
                 Utils.NewWebDriver();
                 Utils.BrowseToHomePage();
-//                Array.Exists<string>(_scenarioContext.ScenarioInfo.Tags, x => x == "Stubbed")
+                //                Array.Exists<string>(_scenarioContext.ScenarioInfo.Tags, x => x == "Stubbed")
             }
             catch (Exception ex)
             {
@@ -106,7 +107,7 @@ namespace WebTest.Steps
         [Then("the page is populated with at least one band")]
         public void ThenSomeBandsAreShown()
         {
-            var allBandsShowing = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(500));
+            var allBandsShowing = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(1000));
             Utils.WriteLine("Test - Number of Bands listed({0}) is greater than 0 (zero)", allBandsShowing.Count);
             Assert.IsTrue(allBandsShowing.Count>0,"Number of Bands listed ({0}) is greater than 0 (zero)", allBandsShowing.Count);
         }
@@ -139,9 +140,84 @@ namespace WebTest.Steps
         [Then(@"on the page Band ""(.*)"" is playing at ""(.*)"" festival")]
         public void ThenOnThePageBandIsPlayingAtFestival(string bandName, string expectedFestival)
         {
-            IWebElement bandElement = default(IWebElement);
-            IWebElement festivalElement = default(IWebElement);
+            string elementText=null;
+            string unescapedBandName = Regex.Unescape(bandName);
+            string unescapedFestivalName = Regex.Unescape(expectedFestival);
+            IWebElement bandElementShowing = default(IWebElement);
+            IWebElement festivalElementShowing = default(IWebElement);
             ReadOnlyCollection<IWebElement> festivals = default(ReadOnlyCollection<IWebElement>); ;
+
+            // First find the band we are interested in...
+            try
+            {
+                // Rather than using linq here (IE: bandElement = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(500)).FirstOrDefault(band => Utils.GetElementTextWithoutChildTexts(band) == bandName);)
+                // we will use a long winded schoolboy way.  Reason is, we want to be able to debug the element texts explicitly which linq wouldnt allow....
+                var allBandsShowing = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(500));
+                foreach (IWebElement bandElement in allBandsShowing)
+                {
+                    // Get element text.  This is why we no linq.....
+                    elementText = Utils.GetElementTextWithoutChildTexts(bandElement);
+                    if (elementText== unescapedBandName)
+                    {
+                        bandElementShowing = bandElement;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Abort - Error finding band [{0}] listed on page: ",ex.Message);
+                return;
+            }
+            
+            if (bandElementShowing== default(IWebElement))
+            {
+                Assert.Fail("Abort - Band [{0}] not listed!",bandName);
+                return;
+            }
+
+            // get all festivals that band is listed for....
+            try
+            {
+                festivals = bandElementShowing.FindElements(By.XPath("ul/li"));
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Abort - Error finding festivals band [{0}] is attending: ", ex.Message);
+                return;
+            }
+
+            // see if festivals contains one we want...
+            try
+            {
+                // Not using linq again, for same reason above....
+                var allBandsShowing = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(500));
+                foreach (IWebElement festivalElement in festivals)
+                {
+                    // Get element text.  This is why we no linq.....
+                    elementText = Utils.GetElementTextWithoutChildTexts(festivalElement);
+                    if (elementText == unescapedFestivalName)
+                    {
+                        festivalElementShowing = festivalElement;
+                        break;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Abort - Error finding matching festival [{0}] is attending: ", ex.Message);
+                return;
+            }
+            Utils.WriteLine("Test - Band [{0}] has festival [{1}] listed. Is attending [{2}]", bandName, expectedFestival,String.Join(",",festivals.Select(festival => Utils.GetElementTextWithoutChildTexts(festival))));
+            Assert.IsTrue(festivalElementShowing != default(IWebElement), "Test - Band [{0}] has festival [{1}] listed", bandName, expectedFestival);
+        }
+
+        [Then(@"on the page Band ""(.*)"" is playing at no festivals")]
+        public void ThenOnThePageBandIsPlayingAtNoFestivals(string bandName)
+        {
+            IWebElement bandElement = default(IWebElement);
+            ReadOnlyCollection<IWebElement> festivals = default(ReadOnlyCollection<IWebElement>);
 
             // First find the band we are interested in...
             try
@@ -150,11 +226,11 @@ namespace WebTest.Steps
             }
             catch (Exception ex)
             {
-                Assert.Fail("Abort - Error finding band [{0}] listed on page: ",ex.Message);
+                Assert.Fail("Abort - Error finding band [{0}] listed on page: ", ex.Message);
                 return;
             }
-            
-            if (bandElement== default(IWebElement))
+
+            if (bandElement == default(IWebElement))
             {
                 Assert.Fail("Abort - Band [{0}] not listed!");
                 return;
@@ -171,21 +247,9 @@ namespace WebTest.Steps
                 return;
             }
 
-            // see if festivals contains one we want...
-            try
-            {
-                festivalElement = festivals.FirstOrDefault(festival => Utils.GetElementTextWithoutChildTexts(festival) == expectedFestival);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Abort - Error finding matching festival [{0}] is attending: ", ex.Message);
-                return;
-            }
-            Utils.WriteLine("Test - Band [{0}] has festival [{1}] listed. Is attending [{2}]", bandName, expectedFestival,String.Join(",",festivals.Select(festival => Utils.GetElementTextWithoutChildTexts(festival))));
-            Assert.IsTrue(festivalElement != default(IWebElement), "Test - Band [{0}] has festival [{1}] listed", bandName, expectedFestival);
+
+            Utils.WriteLine("Test - Number of Festivals for band ({0}) ({1}) is zero", bandName,festivals.Count);
+            Assert.IsTrue(festivals.Count==0, "Number of Festivals for band({0}) ({1}) is zero", bandName,festivals.Count);
         }
-
-
-
     }
 }
