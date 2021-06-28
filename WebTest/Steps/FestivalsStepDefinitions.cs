@@ -99,6 +99,18 @@ namespace WebTest.Steps
             }
         }
 
+        /// <summary>
+        /// Verify that the page contains no visible data
+        /// </summary>
+
+        [Then(@"on the page no Bands are shown")]
+        public void ThenOnThePageNoBandsAreShown()
+        {
+            var allBandsShowing = Utils.GetAllBandsShowing(TimeSpan.FromMilliseconds(1000));
+            Utils.WriteLine("Test - Number of Bands listed({0}) is 0 (zero)", allBandsShowing.Count);
+            Assert.IsTrue(allBandsShowing.Count == 0, "Number of Bands listed ({0}) is 0 (zero)", allBandsShowing.Count);
+        }
+
 
 
         /// <summary>
@@ -111,6 +123,8 @@ namespace WebTest.Steps
             Utils.WriteLine("Test - Number of Bands listed({0}) is greater than 0 (zero)", allBandsShowing.Count);
             Assert.IsTrue(allBandsShowing.Count>0,"Number of Bands listed ({0}) is greater than 0 (zero)", allBandsShowing.Count);
         }
+
+
 
         [Then(@"the page is populated with exactly (\d*) band/s")]
         public void ThenThePageIsPopulatedWithExactlyBands(int expectedNumberOfBands)

@@ -99,13 +99,22 @@ namespace WebTest.Drivers
 
         static public ReadOnlyCollection<IWebElement> GetAllBandsShowing(TimeSpan timeout)
         {
-            ReadOnlyCollection<IWebElement> bandsListElements = null;
+            ReadOnlyCollection<IWebElement> bandsListElements = WebDriver.FindElements(By.XPath("noused")); //nasty way to initialise the collection to empty...
+            IWebElement outerListElement = null;
             int lastCount = 0;
             int thisCount = 0;
             DateTime timeStart = DateTime.Now;
             TimeSpan listUpdateTimeout = timeout;
 
-            var outerListElement = Utils.WebDriver.FindElement(By.XPath(@"//app-festivals/ol"));
+            try
+            {
+                outerListElement = Utils.WebDriver.FindElement(By.XPath(@"//app-festivals/ol"));
+            }
+            catch (Exception ex)
+            {
+                Utils.WriteLine("No //app-festivals/ol elements found.  Returning empty bandsListElements collection");
+                return bandsListElements;
+            }
 
             while ((DateTime.Now - timeStart) < listUpdateTimeout)
             {
@@ -179,4 +188,5 @@ namespace WebTest.Drivers
             Console.WriteLine("Clicked");
         }
     }
+
 }

@@ -31,7 +31,7 @@ And on the page Band "Critter Girls" is playing at no festivals
 
 @Regression
 @Stubbed
-Scenario Outline:Single Band with Single Festival - boundary tests
+Scenario Outline:Single Band with Single Festival - boundary tests (positive)
 Note. There are no boundary requirements for this coding test so we will assume the following;
 1. Band name shall be minimum one character, maximum 255 characters.  All alphanumerics (UTF-8/ASCII  only), space, punctuations
 2. Festival name shall be minimum 3 characters, maximum 255 chars.  All alphanumerics (UTF-8/ASCII  only), space, punctuations
@@ -52,3 +52,17 @@ Examples:
 | Festival Name - All Lowercase                       | "MyBand"                                                                                                                                                                                                                                                          | "abcdefghijklmnopqrstuvwxyz"                                                                                                                                                                                                                                      |
 | Festival Name - All Uppercase                       | "MyBand"                                                                                                                                                                                                                                                          | "ABCDEFGHIJKLMNOPQRSTUVWXYZ"                                                                                                                                                                                                                                      |
 
+@Regression
+@Stubbed
+Scenario Outline: No data shown for various API supplied data
+Note. There is no specification for the API so we will expect API can supply data in the formats we try
+Given Festivals API data is <Raw API Json>
+And i browse to the Festivals page
+When the "Festivals" page is viewed
+Then on the page no Bands are shown
+Examples:
+| Test description                                            | Raw API Json                                           |
+| Minimum empty Json                                          | "[{}]"                                                 |
+| No festival and Empty Bands array                           | "[{"bands":[{}]}]"                                     |
+| No festival and single band with no name but a record label | "[{"bands":[{"recordLabel":"ACR"}]}]"                  |
+| Full single festival one band but empty data                | "[{"name":"","bands":[{"name":"","recordLabel":""}]}]" |
